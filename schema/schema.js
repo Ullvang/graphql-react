@@ -1,6 +1,7 @@
 const graphql = require("graphql");
-const _ = require("lodash");
 const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema } = graphql;
+const axios = require("axios");
+require("dotenv-flow").config();
 
 const UserType = new GraphQLObjectType({
   name: "User",
@@ -10,11 +11,6 @@ const UserType = new GraphQLObjectType({
     age: { type: GraphQLInt },
   },
 });
-
-const users = [
-  { id: "23", firstName: "Bill", age: 20 },
-  { id: "47", firstName: "Sam", age: 21 },
-];
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -27,7 +23,9 @@ const RootQuery = new GraphQLObjectType({
         },
       },
       resolve(parentValue, args) {
-        return _.find(users, { id: args.id });
+        return axios
+          .get(`${process.env.URL}/users/${args.id}`)
+          .then((response) => response.data);
       },
     },
   },

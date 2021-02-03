@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "json:server": "json-server --watch db.json",
-    "dev": "SET NODE_ENV=development & node server.js"
+    "dev": "set NODE_ENV=development&&node server.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Ullvang/graphql-react#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "dotenv-flow": "^3.2.0",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
