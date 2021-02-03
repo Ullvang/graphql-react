@@ -5,6 +5,7 @@ const {
   GraphQLInt,
   GraphQLSchema,
   GraphQLList,
+  GraphQLNonNull,
 } = graphql;
 const axios = require("axios");
 require("dotenv-flow").config();
@@ -81,17 +82,20 @@ const mutation = new GraphQLObjectType({
     addUser: {
       type: UserType,
       args: {
-        firstName: { type: GraphQLString },
-        age: { type: GraphQLInt },
-        companyId: { type: GraphQLString }
+        firstName: { type: new GraphQLNonNull(GraphQLString) },
+        age: { type: new GraphQLNonNull(GraphQLInt) },
+        companyId: { type: GraphQLString },
       },
-      resolve:() {
-
-      }
-    }
-  }
-})
+      resolve(parentValue, { firstName, age }) {
+        return axios
+          .post(`${process.env.URL}/users`, { firstName, age })
+          .then((res) => res.data);
+      },
+    },
+  },
+});
 
 module.exports = new GraphQLSchema({
   query: RootQuery,
+  mutation,
 });
