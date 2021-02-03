@@ -1,5 +1,11 @@
 const graphql = require("graphql");
-const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema } = graphql;
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLInt,
+  GraphQLSchema,
+  GraphQLList,
+} = graphql;
 const axios = require("axios");
 require("dotenv-flow").config();
 
@@ -9,6 +15,14 @@ const CompanyType = new GraphQLObjectType({
     id: { type: GraphQLString },
     name: { type: GraphQLString },
     description: { type: GraphQLString },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(parentValue, args) {
+        return axios
+          .get(`${process.env.URL}/companies/${parentValue.id}/users`)
+          .then((res) => res.data);
+      },
+    },
   },
 });
 
